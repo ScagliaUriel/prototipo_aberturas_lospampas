@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aberturas Los Pampas — Prototipo funcional</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2733;--mut:#667;--line:#dde1e6;--navy:#1f3b57;--acc:#b8863b;--ok:#2a7a3b;--bad:#b33;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root:not([data-theme="light"]){color-scheme:light}
+*{box-sizing:border-box}html,body{margin:0}body{font:15px/1.45 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:5}
+.bar{max-width:980px;margin:auto;display:flex;align-items:center;gap:6px;padding:10px 14px;flex-wrap:wrap}
+.logo{font-weight:700;margin-right:auto;cursor:pointer}
+nav button,.lnk{background:none;border:0;color:#cfdcea;padding:7px 10px;border-radius:6px;cursor:pointer;font:inherit}
+nav button.on{background:rgba(255,255,255,.15);color:#fff}
+main{max-width:980px;margin:auto;padding:16px 14px 60px}
+h2{margin:4px 0 14px;color:var(--navy)}h3{margin:18px 0 8px}
+.chip{display:inline-block;font-size:11px;background:#e9eef5;color:var(--navy);border-radius:10px;padding:2px 8px;margin-left:8px;vertical-align:middle;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.img{background:#e6e9ed;border-radius:8px;height:120px;display:flex;align-items:center;justify-content:center;color:#889;font-size:13px;margin-bottom:10px}
+.price{font-weight:700;color:var(--navy);font-size:17px}
+button.p,button.s{border-radius:8px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--navy)}
+button.p{background:var(--navy);color:#fff}button.s{background:#fff;color:var(--navy)}button.w{width:100%}
+label{display:block;font-size:12px;color:var(--mut);margin:10px 0 4px}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+table{width:100%;border-collapse:collapse;font-size:14px;display:block;overflow-x:auto}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}th{font-size:12px;color:var(--mut)}
+.tag{padding:2px 9px;border-radius:10px;font-size:12px;background:#e9eef5}.tag.ok{background:#dff3e3;color:var(--ok)}.tag.warn{background:#fde9d4;color:#9a5b00}.tag.bad{background:#fde3e3;color:var(--bad)}
+.msg{padding:10px;border-radius:8px;margin-top:10px;font-size:14px}.msg.ok{background:#dff3e3;color:var(--ok)}.msg.bad{background:#fde3e3;color:var(--bad)}
+.hero{background:linear-gradient(135deg,#1f3b57,#2f5880);color:#fff;border-radius:12px;padding:26px;margin-bottom:16px}.hero h2{color:#fff;margin:0 0 6px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.kpi b{display:block;font-size:22px;color:var(--navy)}
+.bars{display:flex;align-items:flex-end;gap:14px;height:140px;padding-top:10px}.bars div{flex:1;background:var(--navy);border-radius:5px 5px 0 0;color:#fff;font-size:11px;text-align:center}
+.tot{font-size:18px;font-weight:700;text-align:right;margin-top:8px}.sub{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.sub button{border:1px solid var(--line);background:#fff;padding:7px 12px;border-radius:20px;cursor:pointer;font:inherit}.sub button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12171d;--card:#1b222b;--ink:#e7ebf0;--mut:#9aa6b3;--line:#2c3744;--navy:#6fa3d6;color-scheme:dark}.hero{background:linear-gradient(135deg,#243d57,#2f5880)}button.p{color:#0f1720}.tag{background:#2a3644}}
+
+.side{display:grid;grid-template-columns:1fr 220px;gap:14px}@media(max-width:720px){.side{grid-template-columns:1fr}}
+.sm{font-size:12px;color:var(--mut)}input[type=checkbox],input[type=radio]{width:auto}.mini{padding:5px 9px;font-size:13px;border-radius:6px}
+footer{max-width:980px;margin:auto;padding:0 14px 30px;color:var(--mut);font-size:12px}footer button{background:none;border:0;color:var(--mut);text-decoration:underline;cursor:pointer;font:inherit}
+</style></head><body>
+<header><div class="bar"><span class="logo" onclick="go('home')">Aberturas Los Pampas</span><nav id="nav"></nav><button class="lnk" id="auth"></button></div></header>
+<main id="app"></main>
+<footer>Prototipo funcional de demostración · los datos se guardan solo en este navegador · <button onclick="resetDemo()">Reiniciar demo</button></footer>
+<script>
+const KEY="alp_proto_v1",ROLE_C="Cliente Registrado";
+const seed=()=>({s:null,cart:{},inst:false,n:{ped:1004,cot:245,oc:30},audit:[],ocs:[],
+users:{"juan.perez@constructora.com":{name:"Juan Pérez",pass:"Cliente123",role:ROLE_C},"ventas@lospampas.com":{name:"Gestor de Ventas",pass:"Ventas123",role:"Gestor de Ventas"},"deposito@lospampas.com":{name:"Operador de Depósito",pass:"Deposito123",role:"Operador de Depósito"},"admin@lospampas.com":{name:"Administrador",pass:"Admin123",role:"Administrador"}},
+prods:[{id:101,n:"Ventana Corrediza Modena 150x110",d:"Aluminio Blanco DVH",cat:"Ventanas",mat:"Aluminio",p:185000,s:12},{id:102,n:"Puerta Oblak Oblakium 80x200",d:"Inyectada PVC",cat:"Puertas",mat:"PVC",p:240000,s:5},{id:103,n:"Paño Fijo A30 New 100x200",d:"Aluminio Negro Anodizado",cat:"Paños fijos",mat:"Aluminio",p:210000,s:3},{id:104,n:"Portón Chapa Inyectada 240x220",d:"Chapa",cat:"Portones",mat:"Chapa",p:210000,s:2}],
+orders:[{id:"#1004",u:"juan.perez@constructora.com",c:"Juan Pérez",f:"09/10/2026",pago:"Pagado",medio:"Mercado Pago",log:"En preparación",inst:"Sí (Agendada 20/10/2026)",items:[{id:101,q:2},{id:102,q:1}],total:655000},{id:"#1003",u:"x",c:"Constructora SRL",f:"08/10/2026",pago:"Pendiente de pago",medio:"Transferencia",log:"En espera",inst:"No",items:[{id:103,q:1}],total:210000}],
+quotes:[{id:"COT-245",u:"juan.perez@constructora.com",c:"Juan Pérez",f:"05/10/2026",tipo:"Ventana Corrediza (Línea Modena)",an:1500,al:1200,mat:"Aluminio",est:360000,estado:"En Revisión",precio:null,plano:""}],
+provs:[{id:1,rs:"Aluar Aluminio Argentina S.A.",tel:"011 4000-1234",email:"ventas@aluar.com",act:true,items:[{cod:"ALU-MOD-01",desc:"Perfil Marco Modena Blanco 6m",c:18500,disc:false},{cod:"VID-DVH-04",desc:"Panel Vidrio DVH 4/12/4",c:24000,disc:false}]},{id:2,rs:"Vidriería del Litoral",tel:"0341 555-0101",email:"info@vidlitoral.com",act:true,items:[{cod:"VID-LAM-03",desc:"Vidrio Laminado 3+3",c:30000,disc:true},{cod:"VID-SIM-04",desc:"Vidrio Simple 4mm",c:12000,disc:false}]}]});
+let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!S||!S.prods)S=seed();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let U={v:"home",tab:null,f:{cat:"",mat:"",min:"",max:""},q:{},m:{},nuevo:false};
+const $=n=>n==null?"—":n.toLocaleString("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0});
+const hoy=()=>new Date().toLocaleDateString("es-AR");
+const chip=t=>`<span class="chip">${t}</span>`,tag=(t,k)=>`<span class="tag ${k||""}">${t}</span>`,msg=(t,k)=>t?`<div class="msg ${k}">${t}</div>`:"";
+const isStaff=()=>S.s&&S.s.role!==ROLE_C,prod=id=>S.prods.find(p=>p.id==id);
+const log=(accion,tabla,reg,ant,nue)=>{S.audit.unshift({f:new Date().toLocaleString("es-AR"),u:S.s?S.s.email:"sistema",accion,tabla,reg,ant:ant??"—",nue:nue??"—"});};
+const TABS={"Gestor de Ventas":[["cot","Cotizaciones"],["ped","Pedidos"],["oc","Órdenes de compra"],["dash","Dashboard"]],"Operador de Depósito":[["inv","Inventario"],["ped","Pedidos y Despachos"],["oc","Órdenes de compra"]],"Administrador":[["aud","Auditoría"],["prov","Proveedores"]]};
+function go(v,x){U.v=v;U.m={};if(x)U.tab=x;render()}
+function setTab(t){U.tab=t;U.m={};render()}
+function render(){save();const st=isStaff(),t=TABS[S.s&&S.s.role];
+ document.getElementById("nav").innerHTML=st?t.map(([k,l])=>`<button class="${U.tab==k?"on":""}" onclick="setTab('${k}')">${l}</button>`).join(""):[["home","Catálogo"],["cotizador","Cotizador"],["cuenta","Mis Pedidos"],["contacto","Contacto"]].map(([k,l])=>`<button class="${U.v==k?"on":""}" onclick="go('${k}')">${l}</button>`).join("");
+ const a=document.getElementById("auth");a.textContent=S.s?`Salir (${S.s.name})`:"Ingresar";a.onclick=()=>{if(S.s){S.s=null;U.v="home"}else U.v="login";render()};
+ if(st){if(!t.some(x=>x[0]==U.tab))U.tab=t[0][0];U.v="panel"}else if(U.v=="panel")U.v="home";
+ document.getElementById("app").innerHTML=V[U.v]();window.scrollTo(0,0)}
+// ---------- CU-03 ----------
+function login(){const e=g("em").trim().toLowerCase(),p=g("pw"),u=S.users[e];
+ if(!u||u.pass!==p){U.m.l="Usuario o contraseña incorrectos";return render()}
+ S.s={email:e,name:u.name,role:u.role};U.m={};const a=U.after;U.after=null;U.tab=null;go(isStaff()?"panel":(a||"home"))}
+function registrar(){const e=g("rem").trim().toLowerCase(),p=g("rpw"),n=g("rnm").trim();
+ if(!n||!/^\S+@\S+\.\S+$/.test(e)){U.m.r=["Completá nombre y un e-mail válido","bad"];return render()}
+ if(S.users[e]){U.m.r=["El e-mail ya se encuentra registrado","bad"];return render()}
+ if(p.length<8||!/\d/.test(p)||!/[A-Z]/.test(p)){U.m.r=["La clave debe tener al menos 8 caracteres, un número y una mayúscula","bad"];return render()}
+ S.users[e]={name:n,pass:p,role:ROLE_C};S.s={email:e,name:n,role:ROLE_C};const a=U.after;U.after=null;go(a||"home")}
+const g=id=>(document.getElementById(id)||{}).value||"";
+// ---------- CU-01 / CU-04 ----------
+function filtrar(){U.f={cat:g("fc"),mat:g("fm"),min:g("fmin"),max:g("fmax")};render()}
+function add(id){const p=prod(id),q=(S.cart[id]||0)+1;U.m={};if(q>p.s){U.m.c=`Solo quedan ${p.s} unidades disponibles`;S.cart[id]=p.s}else S.cart[id]=q;U.v="carrito";render()}
+function qty(id,d){const p=prod(id),q=(S.cart[id]||0)+d;U.m={};if(q>p.s){U.m.c=`Solo quedan ${p.s} unidades disponibles`;S.cart[id]=p.s}else S.cart[id]=Math.max(0,q);render()}
+const rows=()=>Object.entries(S.cart).filter(([,q])=>q>0).map(([i,q])=>({p:prod(i),q}));
+const sub=()=>rows().reduce((a,r)=>a+r.p.p*r.q,0),inst=()=>S.inst&&sub()?45000:0;
+// ---------- CU-02 ----------
+function calc(){const an=+g("an"),al=+g("al"),f=[];U.q={tp:g("tp"),an:g("an"),al:g("al"),mat:g("mt"),vi:g("vi"),co:g("co"),ob:g("ob"),pl:(document.getElementById("pl").files[0]||{}).name||""};
+ if(!an)f.push("Ancho");if(!al)f.push("Alto");
+ if(f.length){U.m.q=["Falta completar: "+f.join(", "),"bad"];U.q.est=null;return render()}
+ if(an<500||al<500||an>3000||al>3000){U.m.q=["Las dimensiones están fuera del rango estándar de fabricación (500 a 3000 mm)","bad"];U.q.est=null;return render()}
+ const a=an*al/1e6,vi=+U.q.vi;U.q.est={mat:Math.round(a*116667/1000)*1000,mo:65000,vid:Math.round(a*vi)*1000};U.q.est.tot=U.q.est.mat+U.q.est.mo+U.q.est.vid;U.m.q=null;render()}
+function sendQ(){if(!S.s||isStaff()){U.after="cotizador";return go("login")}
+ const id="COT-"+(++S.n.cot),q=U.q;S.quotes.unshift({id,u:S.s.email,c:S.s.name,f:hoy(),tipo:q.tp,an:q.an,al:q.al,mat:q.mat,est:q.est.tot,estado:"En Revisión",precio:null,plano:q.pl});
+ U.q={};U.m.q=[`Solicitud ${id} enviada. Estado: En Revisión. Seguila en Mis Pedidos.`,"ok"];render()}
+// ---------- CU-05 / CU-06 ----------
+function descontar(items){items.forEach(x=>{const p=prod(x.id),a=p.s;p.s=Math.max(0,p.s-x.q);log("Descuento de stock por venta","Producto",p.id,a,p.s)})}
+function pagar(){const r=rows();if(!r.length)return;
+ if(r.some(x=>x.q>x.p.s)){U.m={p:["Producto sin stock disponible","bad"]};U.v="carrito";return render()}
+ const medio=document.querySelector('input[name=mp]:checked').value,rech=document.getElementById("rech")&&document.getElementById("rech").checked,id="#"+(S.n.ped++),total=sub()+inst();
+ const o={id,u:S.s.email,c:S.s.name,f:hoy(),pago:"Pendiente de pago",medio,log:"En espera",inst:S.inst?"Sí (Pendiente)":"No",items:r.map(x=>({id:x.p.id,q:x.q})),total};S.orders.unshift(o);S.cart={};
+ if(medio=="Transferencia"){U.m.p=[`Pedido ${id} registrado como Pendiente de pago. Transferí ${$(total)} a CBU 0170012340000012345678 · Alias LOS.PAMPAS.ABERTURAS · CUIT 30-50001234-8. Ventas confirmará la acreditación.`,"ok"]}
+ else if(rech){U.m.p=[`Pago rechazado por la entidad emisora. El pedido ${id} queda Pendiente de pago: podés reintentar desde Mis Pedidos.`,"bad"]}
+ else{aprobar(o);U.m.p=[`Pago aprobado ✓ Pedido ${id} confirmado. Comprobante enviado por e-mail.`,"ok"]}
+ U.v="checkout";render()}
+function aprobar(o){o.pago="Pagado";o.log="En preparación";descontar(o.items);log("Pago aprobado","Pedido",o.id,"Pendiente de pago","Pagado")}
+function reintentar(i){const o=S.orders[i];if(o.items.some(x=>x.q>prod(x.id).s)){U.m.h=["Producto sin stock disponible","bad"];return render()}aprobar(o);U.m.h=[`Pago de ${o.id} aprobado ✓`,"ok"];render()}
+// ---------- staff actions ----------
+function confirmarTransf(i){const o=S.orders[i];aprobar(o);render()}
+function avanzar(i){const o=S.orders[i],L=["En preparación","Despachado","Entregado"],n=L[L.indexOf(o.log)+1];if(n){log("Cambio de estado logístico","Pedido",o.id,o.log,n);o.log=n}render()}
+function agendar(i){const d=g("d"+i);if(!d||new Date(d)<=new Date(new Date().toDateString())){U.m.o=["La fecha debe ser posterior a la actual","bad"];return render()}
+ const o=S.orders[i];o.inst="Sí (Agendada "+new Date(d+"T12:00").toLocaleDateString("es-AR")+")";log("Instalación agendada","Pedido",o.id,"Pendiente",o.inst);U.m.o=[`Instalación del ${o.id} agendada. Cliente notificado.`,"ok"];render()}
+function cotizar(i,rej){const q=S.quotes[i],p=+g("pr"+i);if(!rej&&!(p>0)){U.m.k=["Ingresá un importe válido","bad"];return render()}
+ q.estado=rej?"Rechazada":"Cotizada";q.precio=rej?null:p;log(rej?"Cotización rechazada":"Cotización cargada","SolicitudCotizacion",q.id,"En Revisión",q.estado);render()}
+function stock(id,d){const p=prod(id),n=p.s+d;if(n<0){U.m.i=["El ajuste dejaría el stock en negativo: operación rechazada","bad"];return render()}log("Ajuste manual de stock","Producto",id,p.s,n);p.s=n;U.m={};render()}
+function precio(id){const p=prod(id),n=+g("pp"+id);if(!(n>0))return;log("Cambio de precio","Producto",id,p.p,n);p.p=n;render()}
+function baja(id){const p=prod(id);if(S.orders.some(o=>o.pago!="Entregado"&&o.log!="Entregado"&&o.items.some(x=>x.id==id))){U.m.i=["El producto tiene pedidos pendientes: no se puede dar de baja. Se sugiere discontinuarlo","bad"];return render()}
+ log("Baja de producto","Producto",id,p.n,"—");S.prods=S.prods.filter(x=>x.id!=id);delete S.cart[id];render()}
+function nuevoProd(){const n=g("nn").trim(),pr=+g("np"),st=+g("ns");if(!n||!(pr>0)||st<0){U.m.i=["Completá nombre, precio y stock","bad"];return render()}
+ const id=Math.max(100,...S.prods.map(p=>p.id))+1;S.prods.push({id,n,d:"",cat:g("nc"),mat:g("nmt"),p:pr,s:st});log("Alta de producto","Producto",id,"—",n);U.nuevo=false;render()}
+function genOC(){const pv=S.provs.find(x=>x.id==g("pvs")),it=pv.items.filter(x=>!x.disc).map(x=>({...x,q:+g("q"+x.cod)})).filter(x=>x.q>0);
+ if(!it.length){U.m.o=["Indicá al menos una cantidad","bad"];return render()}
+ const n=++S.n.oc,t=it.reduce((a,x)=>a+x.q*x.c,0);S.ocs.unshift({n,prov:pv.rs,pid:pv.id,f:hoy(),items:it,total:t,estado:"Pendiente de entrega"});log("Orden de compra emitida","OrdenCompra",n,"—",$(t));U.m.o=[`Orden de Compra N° ${n} generada (${$(t)}) en estado Pendiente de entrega.`,"ok"];render()}
+function altaProv(){const rs=g("vr").trim(),em=g("ve").trim().toLowerCase();
+ if(!rs||!/^\S+@\S+\.\S+$/.test(em)){U.m.v=["Completá razón social y un e-mail válido","bad"];return render()}
+ if(S.provs.some(p=>p.email==em)){U.m.v=["El e-mail ya se encuentra registrado para otro proveedor","bad"];return render()}
+ const id=Math.max(0,...S.provs.map(p=>p.id))+1;S.provs.push({id,rs,tel:g("vt"),email:em,act:true,items:[]});log("Alta de proveedor","Proveedor",id,"—",rs);U.m.v=["Proveedor guardado","ok"];render()}
+function bajaProv(id){if(S.ocs.some(o=>o.pid==id&&o.estado!="Completada")){U.m.v=["El proveedor tiene órdenes de compra activas: no se puede dar de baja. Se sugiere inactivarlo","bad"];return render()}S.provs=S.provs.filter(p=>p.id!=id);log("Baja de proveedor","Proveedor",id,"—","—");render()}
+function togProv(id){const p=S.provs.find(x=>x.id==id);p.act=!p.act;log(p.act?"Proveedor activado":"Proveedor inactivado","Proveedor",id,"—",p.act?"Activo":"Inactivo");render()}
+function resetDemo(){try{localStorage.removeItem(KEY)}catch(e){}S=seed();U={v:"home",tab:null,f:{cat:"",mat:"",min:"",max:""},q:{},m:{},nuevo:false};render()}
+// ---------- vistas ----------
+const mm=k=>{const m=U.m[k];if(!m)return"";return Array.isArray(m)?msg(m[0],m[1]):msg(m,"bad")};
+const V={
+home:()=>{const f=U.f,L=S.prods.filter(p=>(!f.cat||p.cat==f.cat)&&(!f.mat||p.mat==f.mat)&&(!f.min||p.p>=+f.min)&&(!f.max||p.p<=+f.max));
+ const cats=[...new Set(S.prods.map(p=>p.cat))],opt=(a,v)=>`<option value="">Todas</option>`+a.map(x=>`<option ${v==x?"selected":""}>${x}</option>`).join("");
+ return`<div class="hero"><h2>Aberturas de Calidad en Aluminio y PVC ${chip("CU-01")}</h2><p>Diseño estándar y a medida con envíos a todo el país.</p><button class="s" onclick="go('cotizador')">Cotizar a Medida</button></div><h3>Productos Destacados</h3>
+ <div class="side"><div class="grid">${L.length?L.map(p=>`<div class="card"><div class="img">Imagen</div><b>${p.n}</b><div class="sm">${p.d}</div><div class="price">${$(p.p)}</div>${p.s?"":tag("Sin stock","bad")} ${p.s&&p.s<=2?tag("Últimas unidades","warn"):""}<div class="row" style="border:0;gap:8px"><button class="s" onclick="U.prod=${p.id};go('ficha')">Ver</button><button class="p" ${p.s?"":"disabled"} onclick="add(${p.id})">Añadir al Carrito</button></div></div>`).join(""):`<div class="card">No se encontraron aberturas que coincidan con la búsqueda</div>`}</div>
+ <div class="card"><b>Filtros</b><label>Categoría</label><select id="fc">${opt(cats,f.cat)}</select><label>Material</label><select id="fm">${opt(["Aluminio","PVC","Madera","Chapa"],f.mat)}</select><label>Rango de precio</label><div class="two"><input id="fmin" type="number" placeholder="Mín" value="${f.min}"><input id="fmax" type="number" placeholder="Máx" value="${f.max}"></div><button class="p w" onclick="filtrar()">Aplicar Filtros</button></div></div>`},
+ficha:()=>{const p=prod(U.prod)||S.prods[0];return`<h2>${p.n} ${chip("CU-01")}</h2><div class="card two"><div class="img" style="height:220px">Vista Previa Principal</div><div><div class="price" style="font-size:24px">${$(p.p)}</div>${p.s?tag("Stock Disponible","ok"):tag("Sin stock","bad")}<h3>Especificaciones Técnicas</h3><div>• ${p.d||"—"}<br>• Categoría: ${p.cat} · Material: ${p.mat}</div><h3>¿Necesitás este modelo con medidas especiales?</h3><div class="two"><button class="p" ${p.s?"":"disabled"} onclick="add(${p.id})">Añadir al Carrito</button><button class="s" onclick="go('cotizador')">Solicitar a Medida</button></div></div></div>`},
+cotizador:()=>{const q=U.q,e=q.est,v=(k)=>q[k]||"",sel=(id,a,x)=>`<select id="${id}">${a.map(([val,l])=>`<option value="${val}" ${x==val?"selected":""}>${l}</option>`).join("")}</select>`;
+ return`<h2>Solicitud de Cotización a Medida ${chip("CU-02")}</h2><div class="two" style="align-items:start"><div class="card"><label>1. Tipología</label>${sel("tp",["Ventana Corrediza (Línea Modena)","Puerta Oblak","Paño Fijo A30"].map(x=>[x,x]),q.tp)}
+ <label>2. Dimensiones (mm)</label><div class="two"><input id="an" type="number" placeholder="Ancho (ej: 1500)" value="${v("an")}"><input id="al" type="number" placeholder="Alto (ej: 1200)" value="${v("al")}"></div><label>3. Material</label>${sel("mt",["Aluminio","PVC","Madera","Chapa"].map(x=>[x,x]),q.mat)}
+ <label>4. Tipo de vidrio</label>${sel("vi",[["47","Doble Vidriado Hermético (DVH 4/12/4)"],["25","Simple 4mm"],["35","Laminado 3+3"]],q.vi)}<label>5. Color / Acabado</label>${sel("co",["Negro Microtexturado","Blanco","Anodizado Natural"].map(x=>[x,x]),q.co)}
+ <label>6. Plano técnico (opcional)</label><input id="pl" type="file">${q.pl?`<div class="sm">Adjunto: ${q.pl}</div>`:""}<label>7. Observaciones especiales</label><textarea id="ob" rows="2" placeholder="Indicar premarco, contramarco o mosquitero...">${v("ob")}</textarea><button class="p w" style="margin-top:12px" onclick="calc()">Calcular Estimación</button>${mm("q")}</div>
+ <div class="card" style="background:#eef6fd;color:#1d2733"><h3 style="margin-top:0;color:#0b5c91">Resumen de Cotización</h3>${e?`<div class="row"><span>Subtotal Materiales:</span><span>${$(e.mat)}</span></div><div class="row"><span>Mano de Obra / Armado:</span><span>${$(e.mo)}</span></div><div class="row"><span>Estimación Vidrio:</span><span>${$(e.vid)}</span></div><div class="tot">Total Estimado: ${$(e.tot)}</div><p class="sm" style="color:#456">Estimación orientativa: el precio final lo confirma el Gestor de Ventas.</p><button class="p w" style="background:#16a34a;border-color:#16a34a" onclick="sendQ()">Enviar a Revisión Técnica</button>`:`<p class="sm" style="color:#456">Completá el formulario y presioná "Calcular Estimación".</p>`}</div></div>`},
+carrito:()=>{const r=rows();return`<h2>Mi Carrito de Compras ${chip("CU-04")}</h2>${mm("c")}${mm("p")}${r.length?`<div class="side"><div class="card">${r.map(x=>`<div class="row"><div><b>${x.p.n}</b><br><span class="sm">${x.p.d} · ${$(x.p.p)} c/u</span></div><div><button class="s mini" onclick="qty(${x.p.id},-1)">−</button> ${x.q} <button class="s mini" onclick="qty(${x.p.id},1)">+</button></div><b>${$(x.p.p*x.q)}</b></div>`).join("")}<label style="display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink)"><input type="checkbox" ${S.inst?"checked":""} onchange="S.inst=this.checked;render()"> Solicitar servicio de colocación e instalación técnica en obra</label></div>
+ <div class="card"><b>Resumen de Compra</b><div class="row"><span>Subtotal Productos:</span><span>${$(sub())}</span></div><div class="row"><span>Servicio de Instalación:</span><span>${$(inst())}</span></div><div class="row"><span>Envío estimado:</span><span>Gratis</span></div><div class="tot">Total: ${$(sub()+inst())}</div><button class="p w" onclick="S.s&&!isStaff()?go('checkout'):(U.after='checkout',go('login'))">Proceder al Checkout</button></div></div>`:`<div class="card">Tu carrito está vacío.</div>`}`},
+checkout:()=>{const r=rows();if(!r.length&&!U.m.p)return V.carrito();return`<h2>Checkout — Finalizar Compra ${chip("CU-05 · CU-06")}</h2>${r.length?`<div class="side"><div class="card"><h3 style="margin-top:0">1. Datos Personales y Facturación</h3><input value="${S.s.name}"><h3>2. Dirección de Entrega / Instalación</h3><input value="Av. Pellegrini 1450, Piso 3 A, Rosario"><h3>3. Método de Pago</h3>
+ <label style="display:flex;gap:8px;color:var(--ink)"><input type="radio" name="mp" value="Mercado Pago" checked> Mercado Pago (Tarjetas de Crédito / Débito / Dinero en Cuenta)</label><label style="display:flex;gap:8px;color:var(--ink)"><input type="radio" name="mp" value="Transferencia"> Transferencia Bancaria Directa (CBU / Alias)</label>
+ <label style="display:flex;gap:8px;color:var(--mut)"><input type="checkbox" id="rech"> Simular pago rechazado (solo demo)</label><button class="p w" style="margin-top:12px;background:#16a34a;border-color:#16a34a" onclick="pagar()">Confirmar y Pagar</button></div>
+ <div class="card"><b>Orden de Compra</b>${r.map(x=>`<div class="row"><span>${x.q}x ${x.p.n}</span><span>${$(x.p.p*x.q)}</span></div>`).join("")}${inst()?`<div class="row"><span>Colocación en Obra</span><span>${$(inst())}</span></div>`:""}<div class="tot">Total a Pagar: ${$(sub()+inst())}</div></div></div>`:""}${mm("p")}${r.length?"":`<button class="s" onclick="go('cuenta')">Ver Mis Pedidos</button>`}`},
+cuenta:()=>{if(!S.s)return`<div class="card">Ingresá para ver tus pedidos y cotizaciones. <button class="p" onclick="U.after='cuenta';go('login')">Ingresar</button></div>`;
+ const os=S.orders.map((o,i)=>({o,i})).filter(x=>x.o.u==S.s.email),qs=S.quotes.filter(q=>q.u==S.s.email);
+ return`<h2>Mi Cuenta — Panel de Cliente ${chip("CU-07")}</h2><div class="card"><b>${S.s.name}</b> · ${S.s.email}</div><h3>Historial de Pedidos y Solicitudes</h3>${mm("h")}<div class="card">${os.length||qs.length?`<table><tr><th>N° PEDIDO</th><th>FECHA</th><th>ESTADO PAGO</th><th>LOGÍSTICA</th><th>TOTAL</th><th></th></tr>${os.map(({o,i})=>`<tr><td>${o.id}</td><td>${o.f}</td><td>${tag(o.pago,o.pago=="Pagado"?"ok":"warn")}</td><td>${o.log}</td><td>${$(o.total)}</td><td>${o.pago!="Pagado"&&o.medio=="Mercado Pago"?`<button class="s mini" onclick="reintentar(${i})">Reintentar pago</button>`:""}</td></tr>`).join("")}${qs.map(q=>`<tr><td>${q.id}</td><td>${q.f}</td><td>${tag(q.estado,q.estado=="Rechazada"?"bad":q.estado=="Cotizada"?"ok":"warn")}</td><td>Cotización a medida</td><td>${q.precio?$(q.precio):"Pendiente"}</td><td></td></tr>`).join("")}</table>`:"Todavía no realizaste pedidos."}</div>`},
+contacto:()=>`<h2>Contacto</h2><div class="card">Huerta Grande 1985, Zona Norte, Rosario.</div>`,
+login:()=>`<div class="two" style="align-items:start"><div class="card"><h2>Ingresar ${chip("CU-03")}</h2>${U.m.l?msg(U.m.l,"bad"):""}<label>Correo electrónico</label><input id="em" placeholder="correo@dominio.com"><label>Contraseña</label><input id="pw" type="password"><button class="p w" style="margin-top:12px" onclick="login()">Ingresar</button>
+ <p class="sm">Cuentas de prueba (clave): juan.perez@constructora.com (Cliente123) · ventas@lospampas.com (Ventas123) · deposito@lospampas.com (Deposito123) · admin@lospampas.com (Admin123). El rol lo determina la cuenta.</p></div>
+ <div class="card"><h3 style="margin-top:0">Registrarse</h3>${mm("r")}<label>Nombre</label><input id="rnm"><label>Correo electrónico</label><input id="rem"><label>Contraseña (8+ caracteres, un número y una mayúscula)</label><input id="rpw" type="password"><button class="s w" style="margin-top:12px" onclick="registrar()">Crear cuenta</button></div></div>`,
+panel:()=>{const t=U.tab,P={
+ inv:()=>`<h2>Gestión de Inventario y Stock ${chip("CU-08")}</h2>${mm("i")}<div class="card"><div class="row" style="border:0"><span class="sm">Stock mínimo: 2 unidades</span><button class="p mini" onclick="U.nuevo=!U.nuevo;render()">+ Nuevo Producto</button></div>${U.nuevo?`<div class="two"><input id="nn" placeholder="Nombre"><input id="np" type="number" placeholder="Precio"><select id="nc"><option>Ventanas</option><option>Puertas</option><option>Paños fijos</option><option>Portones</option></select><select id="nmt"><option>Aluminio</option><option>PVC</option><option>Madera</option><option>Chapa</option></select><input id="ns" type="number" placeholder="Stock"><button class="p" onclick="nuevoProd()">Guardar</button></div>`:""}
+ <table><tr><th>ID</th><th>PRODUCTO</th><th>CATEGORÍA</th><th>PRECIO BASE</th><th>STOCK</th><th>ESTADO</th><th></th></tr>${S.prods.map(p=>`<tr><td>#${p.id}</td><td>${p.n}</td><td>${p.cat}</td><td><input id="pp${p.id}" type="number" value="${p.p}" style="width:110px" onchange="precio(${p.id})"></td><td><button class="s mini" onclick="stock(${p.id},-1)">−</button> ${p.s} <button class="s mini" onclick="stock(${p.id},1)">+</button></td><td>${tag(p.s<=2?"Stock Mínimo":"Normal",p.s<=2?"warn":"ok")}</td><td><button class="s mini" onclick="baja(${p.id})">Dar de baja</button></td></tr>`).join("")}</table></div>`,
+ ped:()=>{const v=S.s.role=="Gestor de Ventas";return`<h2>Control de Pedidos y Despachos ${chip("CU-09 · CU-10")}</h2>${mm("o")}<div class="card"><table><tr><th>ID</th><th>CLIENTE</th><th>FECHA</th><th>ESTADO PAGO</th><th>LOGÍSTICA</th><th>INSTALACIÓN</th></tr>${S.orders.map((o,i)=>`<tr><td>${o.id}</td><td>${o.c}</td><td>${o.f}</td><td>${tag(o.pago,o.pago=="Pagado"?"ok":"warn")}<br><span class="sm">${o.medio}</span></td><td>${o.log} ${!v&&o.pago=="Pagado"&&o.log!="Entregado"?`<button class="s mini" onclick="avanzar(${i})">Avanzar</button>`:""}${o.pago!="Pagado"?`<div class="sm">No avanza hasta registrar el pago</div>`:""}${v&&o.pago!="Pagado"&&o.medio=="Transferencia"?`<br><button class="p mini" onclick="confirmarTransf(${i})">Confirmar acreditación</button>`:""}</td><td>${o.inst}${!v&&o.pago=="Pagado"&&o.inst=="Sí (Pendiente)"?`<br><input type="date" id="d${i}" style="width:150px"> <button class="s mini" onclick="agendar(${i})">Agendar</button>`:""}</td></tr>`).join("")}</table></div>`},
+ oc:()=>{const ps=S.provs.filter(p=>p.act),pv=ps.find(p=>p.id==U.pv)||ps[0];return`<h2>Emitir Orden de Compra de Reabastecimiento ${chip("CU-11")}</h2>${mm("o")}<div class="card"><label>Seleccionar Proveedor (solo activos)</label><select id="pvs" onchange="U.pv=this.value;render()">${ps.map(p=>`<option value="${p.id}" ${pv&&p.id==pv.id?"selected":""}>${p.rs}</option>`).join("")}</select>${pv?`<table><tr><th>CÓDIGO</th><th>DESCRIPCIÓN</th><th>COSTO UN.</th><th>CANTIDAD</th></tr>${pv.items.map(x=>`<tr><td>${x.cod}</td><td>${x.desc}</td><td>${$(x.c)}</td><td>${x.disc?`<span class="sm">El artículo ${x.cod} ya no es suministrado por este proveedor</span>`:`<input id="q${x.cod}" type="number" min="0" value="0" style="width:80px">`}</td></tr>`).join("")}</table><button class="p" style="margin-top:10px" onclick="genOC()">Generar Orden de Compra</button>`:"<p>No hay proveedores activos.</p>"}</div><h3>Órdenes emitidas</h3><div class="card">${S.ocs.length?`<table><tr><th>N°</th><th>PROVEEDOR</th><th>FECHA</th><th>TOTAL</th><th>ESTADO</th></tr>${S.ocs.map(o=>`<tr><td>${o.n}</td><td>${o.prov}</td><td>${o.f}</td><td>${$(o.total)}</td><td>${tag(o.estado,"warn")}</td></tr>`).join("")}</table>`:"Todavía no se emitieron órdenes."}</div>`},
+ dash:()=>{const pag=S.orders.filter(o=>o.pago=="Pagado"),vt=pag.reduce((a,o)=>a+o.total,0),low=S.prods.filter(p=>p.s<=2).length;return`<h2>Dashboard y Métrica de Ventas ${chip("CU-12")}</h2><div class="kpis"><div class="card kpi">VENTAS DEL MES<b>${$(vt)}</b></div><div class="card kpi">PEDIDOS PROCESADOS<b>${pag.length}</b></div><div class="card kpi">COTIZACIONES APROBADAS<b>${S.quotes.filter(q=>q.estado=="Cotizada").length}</b></div><div class="card kpi">ALERTAS STOCK MÍNIMO<b>${low} productos</b></div></div><div class="card"><b>Evolución de Ventas Mensuales</b><div class="bars">${[["Jul",60],["Ago",85],["Sep",100],["Oct",Math.min(160,60+pag.length*30)]].map(([m,h])=>`<div style="height:${h}px">${m}</div>`).join("")}</div></div>`},
+ cot:()=>`<h2>Gestión de Cotizaciones ${chip("CU-02")}</h2>${mm("k")}<div class="card">${S.quotes.length?`<table><tr><th>N°</th><th>CLIENTE</th><th>CONFIGURACIÓN</th><th>ESTIMADO</th><th>ESTADO</th><th>PRECIO COTIZADO</th></tr>${S.quotes.map((q,i)=>`<tr><td>${q.id}</td><td>${q.c}</td><td>${q.tipo}<br><span class="sm">${q.an}×${q.al} mm · ${q.mat}${q.plano?" · plano: "+q.plano:""}</span></td><td>${$(q.est)}</td><td>${tag(q.estado,q.estado=="Cotizada"?"ok":q.estado=="Rechazada"?"bad":"warn")}</td><td>${q.estado=="En Revisión"?`<input id="pr${i}" type="number" placeholder="$" style="width:110px"> <button class="p mini" onclick="cotizar(${i})">Cotizar</button> <button class="s mini" onclick="cotizar(${i},1)">Rechazar</button>`:$(q.precio)}</td></tr>`).join("")}</table>`:"No hay solicitudes."}</div>`,
+ aud:()=>{const f=(U.af||"").toLowerCase(),L=S.audit.filter(a=>(a.u+a.accion+a.tabla+a.reg).toLowerCase().includes(f));return`<h2>Registro de Auditoría ${chip("CU-13")}</h2><div class="card"><input placeholder="Filtrar por usuario, acción o tabla..." value="${U.af||""}" oninput="U.af=this.value;render();document.querySelector('input[placeholder^=Filtrar]').focus()">${L.length?`<table><tr><th>FECHA</th><th>USUARIO</th><th>ACCIÓN</th><th>TABLA</th><th>REGISTRO</th><th>VALOR ANTERIOR</th><th>VALOR NUEVO</th></tr>${L.map(a=>`<tr><td>${a.f}</td><td>${a.u}</td><td>${a.accion}</td><td>${a.tabla}</td><td>${a.reg}</td><td>${a.ant}</td><td>${a.nue}</td></tr>`).join("")}</table>`:`<p>No se encontraron registros de auditoría en el período seleccionado.</p>`}</div>`},
+ prov:()=>`<h2>Gestión de Proveedores ${chip("CU-14")}</h2>${mm("v")}<div class="card"><div class="two"><input id="vr" placeholder="Razón social"><input id="vt" placeholder="Teléfono"><input id="ve" placeholder="E-mail"><button class="p" onclick="altaProv()">+ Nuevo Proveedor</button></div></div><div class="card"><table><tr><th>RAZÓN SOCIAL</th><th>TELÉFONO</th><th>E-MAIL</th><th>ESTADO</th><th></th></tr>${S.provs.map(p=>`<tr><td>${p.rs}</td><td>${p.tel}</td><td>${p.email}</td><td>${tag(p.act?"Activo":"Inactivo",p.act?"ok":"warn")}</td><td><button class="s mini" onclick="togProv(${p.id})">${p.act?"Inactivar":"Activar"}</button> <button class="s mini" onclick="bajaProv(${p.id})">Dar de baja</button></td></tr>`).join("")}</table></div>`};
+ return P[t]()}};
+render();
+</script></body></html>
