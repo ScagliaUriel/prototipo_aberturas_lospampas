@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background-color:#f8f9fa; font-family:system-ui, sans-serif;">
+  <rect x="0" y="0" width="1200" height="70" fill="#1e293b"/>
+  <text x="40" y="42" fill="#ffffff" font-size="22" font-weight="bold">Aberturas Los Pampas</text>
+
+  <text x="40" y="110" fill="#0f172a" font-size="24" font-weight="bold">Solicitud de Cotización a Medida</text>
+
+  <rect x="40" y="130" width="700" height="700" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  
+  <text x="70" y="175" fill="#334155" font-size="15" font-weight="bold">1. Seleccionar Tipología</text>
+  <rect x="70" y="190" width="640" height="40" rx="4" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="85" y="215" fill="#0f172a" font-size="14">Ventana Corrediza (Línea Modena)</text>
+
+  <text x="70" y="265" fill="#334155" font-size="15" font-weight="bold">2. Dimensiones (en mm)</text>
+  <rect x="70" y="280" width="300" height="40" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="85" y="305" fill="#64748b" font-size="14">Ancho (ej: 1500)</text>
+
+  <rect x="410" y="280" width="300" height="40" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="425" y="305" fill="#64748b" font-size="14">Alto (ej: 1200)</text>
+
+  <text x="70" y="355" fill="#334155" font-size="15" font-weight="bold">3. Material</text>
+  <rect x="70" y="370" width="640" height="40" rx="4" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="85" y="395" fill="#0f172a" font-size="14">Aluminio ▾</text>
+
+  <text x="70" y="445" fill="#334155" font-size="15" font-weight="bold">4. Tipo de Vidrio</text>
+  <rect x="70" y="460" width="640" height="40" rx="4" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="85" y="485" fill="#0f172a" font-size="14">Doble Vidriado Hermético (DVH 4/12/4)</text>
+
+  <text x="70" y="535" fill="#334155" font-size="15" font-weight="bold">5. Color / Acabado</text>
+  <rect x="70" y="550" width="640" height="40" rx="4" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="85" y="575" fill="#0f172a" font-size="14">Negro Microtexturado</text>
+
+  <text x="70" y="625" fill="#334155" font-size="15" font-weight="bold">6. Plano Técnico (opcional)</text>
+  <rect x="70" y="640" width="640" height="40" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="4"/>
+  <text x="85" y="665" fill="#94a3b8" font-size="14">📎 Arrastrar plano o hacer clic para subir</text>
+
+  <text x="70" y="710" fill="#334155" font-size="15" font-weight="bold">7. Observaciones Especiales</text>
+  <rect x="70" y="725" width="640" height="35" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="85" y="748" fill="#94a3b8" font-size="14">Indicar premarco, contramarco o mosquitero...</text>
+
+  <rect x="70" y="770" width="220" height="45" rx="6" fill="#0284c7"/>
+  <text x="110" y="798" fill="#ffffff" font-size="15" font-weight="bold">Calcular Estimación</text>
+
+  <rect x="770" y="130" width="390" height="350" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+  <text x="800" y="170" fill="#0369a1" font-size="18" font-weight="bold">Resumen de Cotización</text>
+  <line x1="800" y1="185" x2="1130" y2="185" stroke="#bae6fd" stroke-width="1"/>
+  
+  <text x="800" y="220" fill="#334155" font-size="14">Subtotal Materiales: $210.000</text>
+  <text x="800" y="250" fill="#334155" font-size="14">Mano de Obra / Armado: $65.000</text>
+  <text x="800" y="280" fill="#334155" font-size="14">Estimación Vidrio DVH: $85.000</text>
+  <line x1="800" y1="310" x2="1130" y2="310" stroke="#bae6fd" stroke-width="1"/>
+  
+  <text x="800" y="345" fill="#0f172a" font-size="20" font-weight="bold">Total Estimado: $360.000</text>
+
+  <rect x="800" y="380" width="330" height="45" rx="6" fill="#16a34a"/>
+  <text x="860" y="408" fill="#ffffff" font-size="15" font-weight="bold">Enviar a Revisión Técnica</text>
+</svg>

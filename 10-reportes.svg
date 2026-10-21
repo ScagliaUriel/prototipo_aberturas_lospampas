@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background-color:#f8f9fa; font-family:system-ui, sans-serif;">
+  <rect x="0" y="0" width="1200" height="70" fill="#0f172a"/>
+  <text x="40" y="42" fill="#ffffff" font-size="20" font-weight="bold">Panel Interno — Dashboard y Métrica de Ventas</text>
+
+  <!-- Tarjetas KPI -->
+  <rect x="40" y="100" width="260" height="110" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="60" y="130" fill="#64748b" font-size="13" font-weight="bold">VENTAS DEL MES</text>
+  <text x="60" y="170" fill="#0284c7" font-size="26" font-weight="bold">$4.850.000</text>
+
+  <rect x="325" y="100" width="260" height="110" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="345" y="130" fill="#64748b" font-size="13" font-weight="bold">PEDIDOS PROCESADOS</text>
+  <text x="345" y="170" fill="#0f172a" font-size="26" font-weight="bold">42 órdenes</text>
+
+  <rect x="610" y="100" width="260" height="110" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="630" y="130" fill="#64748b" font-size="13" font-weight="bold">COTIZACIONES APROBADAS</text>
+  <text x="630" y="170" fill="#16a34a" font-size="26" font-weight="bold">18 presupuestos</text>
+
+  <rect x="895" y="100" width="265" height="110" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="915" y="130" fill="#64748b" font-size="13" font-weight="bold">ALERTAS STOCK MÍNIMO</text>
+  <text x="915" y="170" fill="#dc2626" font-size="26" font-weight="bold">3 productos</text>
+
+  <!-- Gráficos Representativos -->
+  <rect x="40" y="240" width="680" height="500" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="70" y="280" fill="#0f172a" font-size="18" font-weight="bold">Evolución de Ventas Mensuales</text>
+
+  <!-- Barras del gráfico -->
+  <rect x="90" y="580" width="60" height="100" fill="#cbd5e1" rx="4"/>
+  <text x="100" y="700" fill="#64748b" font-size="12">Jul</text>
+
+  <rect x="190" y="510" width="60" height="170" fill="#cbd5e1" rx="4"/>
+  <text x="200" y="700" fill="#64748b" font-size="12">Ago</text>
+
+  <rect x="290" y="430" width="60" height="250" fill="#cbd5e1" rx="4"/>
+  <text x="300" y="700" fill="#64748b" font-size="12">Sep</text>
+
+  <rect x="390" y="350" width="60" height="330" fill="#0284c7" rx="4"/>
+  <text x="400" y="700" fill="#0284c7" font-size="12" font-weight="bold">Oct</text>
+
+  <rect x="740" y="240" width="420" height="500" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="770" y="280" fill="#0f172a" font-size="18" font-weight="bold">Ventas por Material</text>
+
+  <circle cx="950" cy="450" r="120" fill="#e2e8f0"/>
+  <path d="M 950 450 L 950 330 A 120 120 0 0 1 1070 450 Z" fill="#0284c7"/>
+  <text x="810" y="620" fill="#0284c7" font-size="14" font-weight="bold">■ Aluminio (65%)</text>
+  <text x="960" y="620" fill="#64748b" font-size="14" font-weight="bold">■ PVC / Chapa (35%)</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background-color:#f8f9fa; font-family:system-ui, sans-serif;">
+  <rect x="0" y="0" width="1200" height="70" fill="#0f172a"/>
+  <text x="40" y="42" fill="#ffffff" font-size="20" font-weight="bold">Panel Interno — Control de Pedidos y Despachos</text>
+
+  <rect x="40" y="100" width="1120" height="650" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="70" y="145" fill="#0f172a" font-size="20" font-weight="bold">Listado Operativo de Ventas</text>
+
+  <rect x="70" y="170" width="1060" height="45" fill="#f8fafc"/>
+  <text x="90" y="198" fill="#475569" font-size="13" font-weight="bold">ID</text>
+  <text x="170" y="198" fill="#475569" font-size="13" font-weight="bold">CLIENTE</text>
+  <text x="380" y="198" fill="#475569" font-size="13" font-weight="bold">FECHA</text>
+  <text x="500" y="198" fill="#475569" font-size="13" font-weight="bold">ESTADO PAGO</text>
+  <text x="670" y="198" fill="#475569" font-size="13" font-weight="bold">LOGÍSTICA</text>
+  <text x="850" y="198" fill="#475569" font-size="13" font-weight="bold">INSTALACIÓN</text>
+
+  <!-- Fila 1 -->
+  <text x="90" y="245" fill="#0284c7" font-size="14" font-weight="bold">#1004</text>
+  <text x="170" y="245" fill="#0f172a" font-size="14" font-weight="bold">Juan Pérez</text>
+  <text x="380" y="245" fill="#334155" font-size="14">09/10/2026</text>
+  <rect x="500" y="228" width="90" height="24" rx="12" fill="#dcfce7"/>
+  <text x="522" y="244" fill="#166534" font-size="12" font-weight="bold">Pagado</text>
+  <text x="670" y="245" fill="#0f172a" font-size="14">En preparación</text>
+  <rect x="850" y="228" width="80" height="24" rx="12" fill="#e0f2fe"/>
+  <text x="870" y="244" fill="#0369a1" font-size="12" font-weight="bold">Sí (Agendada)</text>
+
+  <line x1="70" y1="275" x2="1110" y2="275" stroke="#f1f5f9" stroke-width="1"/>
+
+  <!-- Fila 2 -->
+  <text x="90" y="310" fill="#0284c7" font-size="14" font-weight="bold">#1003</text>
+  <text x="170" y="310" fill="#0f172a" font-size="14" font-weight="bold">Constructora SRL</text>
+  <text x="380" y="310" fill="#334155" font-size="14">08/10/2026</text>
+  <rect x="500" y="293" width="110" height="24" rx="12" fill="#fef3c7"/>
+  <text x="512" y="309" fill="#92400e" font-size="12" font-weight="bold">Pend. Pago</text>
+  <text x="670" y="310" fill="#64748b" font-size="14">En espera</text>
+  <text x="850" y="310" fill="#64748b" font-size="14">No</text>
+</svg>

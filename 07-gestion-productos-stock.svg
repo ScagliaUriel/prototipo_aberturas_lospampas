@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background-color:#f8f9fa; font-family:system-ui, sans-serif;">
+  <rect x="0" y="0" width="1200" height="70" fill="#0f172a"/>
+  <text x="40" y="42" fill="#ffffff" font-size="20" font-weight="bold">Panel Interno — Gestión de Inventario y Stock</text>
+
+  <!-- Filtros -->
+  <rect x="40" y="100" width="350" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="55" y="125" fill="#64748b" font-size="14">Buscar por nombre o ID...</text>
+
+  <rect x="410" y="100" width="180" height="40" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="425" y="125" fill="#0f172a" font-size="14">Todas las Líneas ▾</text>
+
+  <rect x="980" y="100" width="180" height="40" rx="6" fill="#0284c7"/>
+  <text x="1015" y="125" fill="#ffffff" font-size="14" font-weight="bold">+ Nuevo Producto</text>
+
+  <!-- Tabla de Productos -->
+  <rect x="40" y="160" width="1120" height="580" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="40" y="160" width="1120" height="45" fill="#f8fafc"/>
+  
+  <text x="70" y="188" fill="#475569" font-size="13" font-weight="bold">ID</text>
+  <text x="140" y="188" fill="#475569" font-size="13" font-weight="bold">PRODUCTO</text>
+  <text x="450" y="188" fill="#475569" font-size="13" font-weight="bold">CATEGORÍA</text>
+  <text x="620" y="188" fill="#475569" font-size="13" font-weight="bold">PRECIO BASE</text>
+  <text x="780" y="188" fill="#475569" font-size="13" font-weight="bold">STOCK ACTUAL</text>
+  <text x="940" y="188" fill="#475569" font-size="13" font-weight="bold">ESTADO</text>
+
+  <!-- Fila 1 -->
+  <text x="70" y="235" fill="#64748b" font-size="14">#101</text>
+  <text x="140" y="235" fill="#0f172a" font-size="14" font-weight="bold">Ventana Corrediza Modena 150x110</text>
+  <text x="450" y="235" fill="#334155" font-size="14">Aluminio</text>
+  <text x="620" y="235" fill="#0f172a" font-size="14">$185.000</text>
+  <text x="780" y="235" fill="#0f172a" font-size="14" font-weight="bold">12 unidades</text>
+  <rect x="940" y="218" width="90" height="24" rx="12" fill="#dcfce7"/>
+  <text x="960" y="234" fill="#166534" font-size="12" font-weight="bold">Normal</text>
+
+  <line x1="40" y1="260" x2="1160" y2="260" stroke="#f1f5f9" stroke-width="1"/>
+
+  <!-- Fila 2 (Alerta Stock Bajo) -->
+  <text x="70" y="295" fill="#64748b" font-size="14">#102</text>
+  <text x="140" y="295" fill="#0f172a" font-size="14" font-weight="bold">Portón Chapa Inyectada 240x220</text>
+  <text x="450" y="295" fill="#334155" font-size="14">Chapa</text>
+  <text x="620" y="295" fill="#0f172a" font-size="14">$210.000</text>
+  <text x="780" y="295" fill="#dc2626" font-size="14" font-weight="bold">2 unidades</text>
+  <rect x="940" y="278" width="110" height="24" rx="12" fill="#fee2e2"/>
+  <text x="955" y="294" fill="#991b1b" font-size="12" font-weight="bold">Stock Mínimo</text>
+</svg>
