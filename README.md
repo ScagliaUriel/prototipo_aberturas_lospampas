@@ -1,15 +1,114 @@
-# 🪟 Aberturas Los Pampas — Prototipo Navegable
+# Aberturas Los Pampas — Prototipo navegable
 
-Prototipo web interactivo de alta fidelidad para **Aberturas Los Pampas**, empresa de fabricación y venta de aberturas (ventanas, puertas y portones) con sede en Rosario. Desarrollado como entrega académica basado en 11 wireframes oficiales que cubren tanto el flujo de cliente como el panel de administración interno.
+Prototipo web interactivo de alta fidelidad de la plataforma de **Aberturas Los Pampas**, empresa de fabricación y venta de aberturas (ventanas, puertas y portones) con sede en Rosario. Está construido a partir de los 11 wireframes del proyecto y cubre tanto el flujo del cliente como el panel de administración interno.
 
 ---
 
-## 📁 Estructura del proyecto
+## Demo en línea
+
+**https://scagliauriel.github.io/prototipo_aberturas_lospampas/**
+
+> Proyecto académico. Los datos (precios, clientes, CUIT, datos bancarios y teléfonos) son ficticios y de demostración. Es un prototipo de interfaz sin servidor: no hay base de datos ni cobros reales.
+
+---
+
+## Cómo probarlo
+
+1. **Navegación:** la barra superior permite saltar a cualquiera de las 11 pantallas y muestra qué caso de uso corresponde a cada una.
+2. **Flujo de compra:** catálogo (con filtros) → ficha de producto → carrito → checkout (Mercado Pago o transferencia) → "Ver en Mi Cuenta" para consultar el pedido.
+3. **Cotización a medida:** desde "Cotizar a Medida", completá tipología, medidas, material, vidrio y color, y presioná "Calcular Estimación" para ver el desglose.
+4. **Panel interno:** entrá por "06 Login Interno" (barra superior) o por "Acceso Personal Interno" (pie de página) y usá un atajo de demo (Ventas, Depósito o Administración). Desde ahí se accede a stock, proveedores y órdenes de compra, pedidos y despachos, y reportes.
+5. **Comparar SVG** superpone el wireframe original de la pantalla activa, y **Reiniciar** restaura los datos de demostración.
+
+---
+
+## Vistas implementadas
+
+El prototipo implementa 11 pantallas navegables, cada una asociada a su caso de uso (CU):
+
+| # | Vista | Caso de uso |
+|---|-------|-------------|
+| 01 | Home y catálogo | CU-01 / CU-03 |
+| 02 | Ficha de producto | CU-01 |
+| 03 | Carrito de compras | CU-04 |
+| 04 | Checkout y pago | CU-05 / CU-06 |
+| 05 | Cuenta del cliente (pedidos y cotizaciones) | CU-07 |
+| 06 | Login interno | CU-03 |
+| 07 | Gestión de inventario y stock | CU-08 |
+| 08 | Gestión de proveedores y órdenes de compra | CU-11 / CU-14 |
+| 09 | Control de pedidos y despachos | CU-09 / CU-10 |
+| 10 | Dashboard y reportes | CU-12 |
+| 11 | Cotizador a medida | CU-02 |
+
+---
+
+## Cómo funciona
+
+### Arquitectura SPA
+
+Es una **Single Page Application** 100% estática. El HTML de las 11 vistas vive en `index.html` como paneles con clase `.view-panel`, y el router de `app.js` muestra y oculta el panel correcto mediante la función `navigateTo(viewId)`.
 
 ```
-prototipo los pampas/
-├── index.html                        # SPA principal — toda la UI
-├── app.js                            # Motor de navegación y lógica del prototipo
+navigateTo('03')  →  muestra #view-03 (Carrito), oculta el resto
+```
+
+### Estado y persistencia
+
+El estado de la aplicación (`appState`) se guarda en `localStorage` del navegador bajo las claves:
+
+- `alp_products`: catálogo de productos con precios y stock.
+- `alp_cart`: ítems del carrito con cantidades.
+- `alp_orders`: pedidos del cliente demo.
+
+Al abrir la app por primera vez se cargan datos semilla (`DEFAULT_PRODUCTS`, `DEFAULT_CART`, `DEFAULT_ORDERS`). El botón **Reiniciar** borra el almacenamiento y los restaura.
+
+### Barra de control académica
+
+En la parte superior hay una barra fija (`#wireframe-bar`) que permite:
+
+- Navegar directamente a cualquier wireframe.
+- Ver qué caso de uso corresponde a la pantalla activa.
+- Comparar la implementación con el **SVG original** del wireframe mediante un modal.
+- Reiniciar los datos demo.
+
+### Cabeceras diferenciadas
+
+- **Vistas públicas (01 a 05 y 11):** header de cliente con navegación, buscador y carrito.
+- **Vistas del panel interno (07 a 10):** header de administración con menú de módulos. El acceso se simula desde el login interno (WF-06).
+
+### Cotizador a medida (WF-11)
+
+El formulario solicita:
+
+- Tipología (corrediza, oscilobatiente, puerta balcón, paño fijo o portón).
+- Dimensiones en milímetros, con superficie y perímetro calculados.
+- Material, tipo de vidrio y color o acabado.
+- Plano técnico (opcional) y observaciones especiales.
+
+Al calcular, muestra el desglose estimado (materiales, mano de obra y vidrio), el total y el plazo estimado de fabricación. Desde la ficha de un producto se puede abrir el cotizador con la tipología correspondiente.
+
+### Ilustraciones vectoriales
+
+Los productos se dibujan con SVG generados en tiempo real por `getAberturaSVG(type)`, sin imágenes externas. La ficha de producto (WF-02) ofrece tres vistas: frontal, corte técnico DVH y fachada.
+
+---
+
+## Características
+
+- Sin npm, frameworks ni pasos de build: solo HTML, CSS y JavaScript.
+- Datos que persisten entre sesiones gracias a `localStorage`.
+- Diseño responsive, con viewport configurado con `viewport-fit=cover`.
+- Notificaciones (toasts) para las acciones del usuario.
+- Tipografías *Plus Jakarta Sans* y *Space Grotesk*, cargadas desde Google Fonts.
+
+---
+
+## Estructura del proyecto
+
+```
+prototipo_aberturas_lospampas/
+├── index.html                        # SPA principal: toda la UI
+├── app.js                            # Navegación y lógica del prototipo
 ├── styles.css                        # Estilos globales
 ├── 01-home-catalogo.svg              # Wireframe original WF-01
 ├── 02-ficha-producto.svg             # Wireframe original WF-02
@@ -24,130 +123,21 @@ prototipo los pampas/
 └── 11-cotizacion-a-medida.svg        # Wireframe original WF-11
 ```
 
-> No hay dependencias externas de npm, frameworks ni build steps. Sólo HTML + CSS + JS vanilla.
-
 ---
 
-## 🖥️ Vistas implementadas
+## Ejecutar localmente
 
-El prototipo implementa 11 pantallas navegables, cada una mapeada a su caso de uso (CU):
-
-| # | Vista | Caso de Uso |
-|---|-------|-------------|
-| 01 | Home & Catálogo | CU-01 / CU-03 |
-| 02 | Ficha de Producto | CU-01 |
-| 03 | Carrito de Compras | CU-04 |
-| 04 | Checkout y Pago | CU-05 / CU-06 |
-| 05 | Cuenta Cliente (Mis Pedidos) | CU-07 |
-| 06 | Login Interno (Panel Admin) | CU-03 |
-| 07 | Gestión de Inventario y Stock | CU-08 |
-| 08 | Gestión de Proveedores y OC | CU-11 / CU-14 |
-| 09 | Control de Pedidos y Despachos | CU-09 / CU-10 |
-| 10 | Dashboard y Reportes | CU-12 |
-| 11 | Cotizador a Medida | CU-02 |
-
----
-
-## ⚙️ Cómo funciona
-
-### Arquitectura SPA
-
-Es una **Single Page Application** 100% estática. Todo el HTML de las 11 vistas vive en `index.html` como paneles con clase `.view-panel`; el router en `app.js` muestra y oculta el panel correcto mediante la función `navigateTo(viewId)`.
-
-```
-navigateTo('03')  →  muestra #view-03 (Carrito), oculta el resto
-```
-
-### Estado y persistencia
-
-El estado de la aplicación (`appState`) se guarda en `localStorage` bajo las claves:
-
-- `alp_products` — catálogo de productos con precios y stock
-- `alp_cart` — ítems del carrito con cantidades
-- `alp_orders` — pedidos del cliente demo
-
-Al abrir la app por primera vez, se cargan datos semilla (`DEFAULT_PRODUCTS`, `DEFAULT_CART`, `DEFAULT_ORDERS`). El botón **Reiniciar** de la barra de control borra el storage y restaura esos valores.
-
-### Barra de control académica
-
-En la parte superior aparece una barra fija (`#wireframe-bar`) que permite:
-
-- Navegar directamente a cualquier wireframe con un click
-- Ver qué caso de uso corresponde a la pantalla activa
-- Comparar la implementación con el **SVG original** del wireframe mediante un modal
-- Reiniciar todos los datos demo a su estado original
-
-### Cabeceras diferenciadas
-
-- **Vistas públicas (01-05, 11):** se muestra el header de cliente con navegación, buscador y carrito.
-- **Vistas de panel interno (07-10):** se activa un header de administración con menú lateral y título de módulo. El acceso se simula desde el WF-06 (login interno).
-
-### Cotizador a medida (WF-11)
-
-Calcula dinámicamente el precio de una abertura según:
-- **Tipología** (corrediza, oscilobatiente, puerta, portón)
-- **Ancho y alto** en centímetros
-- **Cantidad de hojas**
-- **Tipo de vidriado** (monolítico, DVH, DVH laminado)
-- **Color/terminación** del perfil
-- **Servicio de instalación** (coeficiente adicional)
-
-Desde la ficha de cualquier producto se puede pre-completar el cotizador con la tipología correspondiente.
-
-### Ilustraciones vectoriales
-
-Los productos se renderizan con SVGs generados en tiempo real por `getAberturaSVG(type)` — sin imágenes externas. La ficha de producto (WF-02) incluye tres modos de visualización: vista frontal, corte técnico DVH y vista en fachada.
-
----
-
-## 🚀 Deploy
-
-### Localmente (sin servidor)
-
-Basta con abrir `index.html` en cualquier navegador moderno:
+Basta con abrir `index.html` en un navegador moderno, o servirlo desde la terminal:
 
 ```bash
-# Opción 1: doble click sobre index.html en el explorador de archivos
-
-# Opción 2: desde terminal con Python
 python -m http.server 8080
-# Luego abrí http://localhost:8080
+# luego abrí http://localhost:8080
 ```
-
-### GitHub Pages (recomendado)
-
-El proyecto fue diseñado explícitamente para desplegarse como sitio estático en **GitHub Pages**:
-
-1. Subir la carpeta del proyecto a un repositorio de GitHub.
-2. Ir a **Settings → Pages**.
-3. En *Source*, seleccionar la rama `main` y la carpeta `/ (root)`.
-4. Guardar. GitHub Pages publica la URL en segundos.
-
-```
-https://<usuario>.github.io/<nombre-del-repo>/
-```
-
-> No se requiere ningún paso de build, bundler ni configuración adicional.
-
-### Cualquier hosting estático
-
-El prototipo también se puede alojar en **Netlify**, **Vercel**, **Firebase Hosting** o cualquier servidor que sirva archivos estáticos. Simplemente se sube la carpeta tal como está.
 
 ---
 
-## 🧩 Características destacadas
+## Contexto académico
 
-- **Sin dependencias:** no requiere Node.js, npm, ni ningún framework. Sólo un navegador.
-- **Datos persistentes:** los cambios en stock, carrito y pedidos se mantienen entre sesiones gracias a `localStorage`.
-- **Comparador de wireframes:** modal inline que superpone el SVG original para validar la fidelidad de la implementación.
-- **Responsive:** viewport configurado con `viewport-fit=cover` y layout adaptable.
-- **Tipografía:** *Plus Jakarta Sans* y *Space Grotesk* vía Google Fonts.
-- **Toasts de feedback:** notificaciones no intrusivas para acciones del usuario (añadir al carrito, guardar cambios, etc.).
+Prototipo desarrollado como entrega académica de la Tecnicatura Superior en Análisis Funcional de Sistemas Informáticos, presentado en **Prácticas Profesionalizantes II** (docente: Dante Roselli). Su objetivo es demostrar la correspondencia entre los casos de uso relevados, los wireframes diseñados y una implementación navegable.
 
----
-
-## 🎓 Contexto académico
-
-Este prototipo fue desarrollado como entrega de la materia de **Análisis de Sistemas** (o equivalente) para demostrar la correspondencia entre los casos de uso relevados, los wireframes diseñados y una implementación navegable funcional.
-
-Cada vista puede compararse directamente con su wireframe SVG original usando el botón **Comparar SVG** de la barra de control.
+**Equipo:** Máximo Manno y Uriel Scaglia.
